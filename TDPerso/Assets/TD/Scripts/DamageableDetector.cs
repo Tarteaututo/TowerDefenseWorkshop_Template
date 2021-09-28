@@ -60,14 +60,17 @@ public class DamageableDetector : MonoBehaviour
 
 		if (damageable != null && _damageablesInRange.Contains(damageable) == true)
 		{
-			_damageablesInRange.Remove(damageable);
 			damageable.DamageTaken -= Damageable_OnDamageTaken;
+			_damageablesInRange.Remove(damageable);
 		}
 	}
 
 	private void Damageable_OnDamageTaken(Damageable caller, int currentHealth, int damageTaken)
 	{
-		_damageablesInRange.Remove(caller);
+		if (currentHealth <= 0)
+		{
+			_damageablesInRange.Remove(caller);
+		}
 	}
 
 }

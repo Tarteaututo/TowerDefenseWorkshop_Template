@@ -8,8 +8,12 @@ public class WaveEntity : MonoBehaviour
 	[SerializeField]
 	private PathFollower _pathFollower = null;
 
-	public void SetPath(Path path)
+	public void SetPath(Path path, bool teleportToFirstWaypoint = true)
 	{
-		_pathFollower.SetPath(path);
+		_pathFollower.SetPath(path, teleportToFirstWaypoint);
+	}
+
+	public void UpdateEntity(float deltaTime)
+	{
 	}
 }

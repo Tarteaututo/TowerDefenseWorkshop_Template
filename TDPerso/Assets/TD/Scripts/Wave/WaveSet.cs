@@ -1,56 +1,25 @@
 ﻿namespace GSGD1
 {
-	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEngine;
 
-	public enum EntityType
+	[CreateAssetMenu(menuName = "Gameleon/Database/WaveSet")]
+	public class WaveSet : ScriptableObject
 	{
-		None,
-		Light,
-		Heavy,
-		Speedy
-	}
-
-	[System.Serializable]
-	public class WaveEntityData
-	{
+		[Tooltip("Index is the spawner index. _waves[0] will be spawner00, _wave[1] spawner01, etc...")]
 		[SerializeField]
-		private WaveEntity _waveEntityPrefab = null;
+		private List<Wave> _waves = null;
 
 		[SerializeField]
-		private EntityType _entityType = EntityType.None;
-
-		public WaveEntity WaveEntityPrefab => _waveEntityPrefab;
-		public EntityType EntityType => _entityType;
-	}
-
-
-	[CreateAssetMenu(menuName = "Gameleon/Database/WaveDatabase")]
-	public class WaveDatabase : ScriptableObject
-	{
-		[SerializeField]
-		private List<WaveEntityData> _waveEntityDatas = null;
+		private float _waitingDurationBefore = 0f;
 
 		[SerializeField]
-		private List<WaveSet> _waves = null;
+		private float _waitingDurationAfter = 5f;
 
-		public List<WaveSet> Waves
-		{
-			get { return _waves; }
-		}
+		public List<Wave> Waves => _waves;
 
-		public bool GetWaveElementFromType(EntityType entityType, out WaveEntity outEntity)
-		{
-			WaveEntityData waveEntityData = _waveEntityDatas.Find(entity => entity.EntityType == entityType);
-			if (waveEntityData != null)
-			{
-				outEntity = waveEntityData.WaveEntityPrefab;
-				return true;
-			}
-			outEntity = null;
-			return false;
-		}
+		public float WaitingDurationBefore => _waitingDurationBefore; 
+		public float WaitingDurationAfter => _waitingDurationAfter;
 	}
 }
 

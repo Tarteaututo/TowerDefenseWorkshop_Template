@@ -11,7 +11,7 @@
 
 		public virtual bool CanFire()
 		{
-			return _timer.IsRunning() == false;
+			return _timer.IsRunning == false;
 		}
 
 		protected virtual void Update()

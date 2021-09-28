@@ -27,9 +27,17 @@
 			this.enabled = canMove;
 		}
 
-		public void SetPath(Path path)
+		public void SetPath(Path path, bool teleportToFirstWaypoint = true)
 		{
 			_path = path;
+			if (teleportToFirstWaypoint == true)
+			{
+				Transform firstWaypoint = _path.FirstWaypoint;
+				if (firstWaypoint != null)
+				{
+					transform.position = firstWaypoint.position;
+				}
+			}
 		}
 
 		private void Update()

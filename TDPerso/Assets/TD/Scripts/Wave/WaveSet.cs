@@ -3,6 +3,10 @@
 	using System.Collections.Generic;
 	using UnityEngine;
 
+#if UNITY_EDITOR
+	using UnityEditor;
+#endif //UNITY_EDITOR
+
 	[CreateAssetMenu(menuName = "Gameleon/Database/WaveSet")]
 	public class WaveSet : ScriptableObject
 	{
@@ -10,6 +14,7 @@
 		[SerializeField]
 		private List<Wave> _waves = null;
 
+		// TODO AL 
 		[SerializeField]
 		private float _waitingDurationBefore = 0f;
 
@@ -18,95 +23,38 @@
 
 		public List<Wave> Waves => _waves;
 
-		public float WaitingDurationBefore => _waitingDurationBefore; 
+		public float WaitingDurationBefore => _waitingDurationBefore;
 		public float WaitingDurationAfter => _waitingDurationAfter;
+
+		public float GetWaveDuration()
+		{
+			float duration = 0;
+			for (int i = 0, length = _waves.Count; i < length; i++)
+			{
+				duration += _waves[i].GetWaveDuration();
+			}
+			return duration + _waitingDurationBefore + _waitingDurationAfter;
+		}
 	}
+
+
+
+#if UNITY_EDITOR
+	[CustomEditor(typeof(WaveSet))]
+	public class WaveSetEditor : Editor
+	{
+		public override void OnInspectorGUI()
+		{
+			base.OnInspectorGUI();
+			serializedObject.Update();
+
+			var waveDatabase = (serializedObject.targetObject as WaveSet);
+
+			EditorGUILayout.Space(24);
+			EditorGUILayout.TextArea(string.Format("Duration : {0} seconds", waveDatabase.GetWaveDuration().ToString()));
+		}
+	}
+#endif //UNITY_EDITOR
+
+
 }
-
-
-
-
-//	using System.Collections;
-//	using System.Collections.Generic;
-//	using UnityEngine;
-
-//	[System.Serializable]
-//	public class Wave
-//	{
-//		[SerializeField]
-//		private List<WaveEntity> _waveEntities = null;
-
-//		[SerializeField]
-//		private Timer _internalTimer = null;
-
-//		[System.NonSerialized]
-//		private int _currentEntityIndex = 0;
-
-//		public bool IsWaveEnded()
-//		{
-//			return _currentEntityIndex >= _waveEntities.Count;
-//		}
-
-//		public float GetTotalDuration()
-//		{
-//			return _internalTimer.GetDuration() * _waveEntities.Count;
-//		}
-
-//		public void StartWave()
-//		{
-//			_internalTimer.Start();
-//		}
-
-//		public void ResetWave()
-//		{
-//			_internalTimer.Stop();
-//			_currentEntityIndex = 0;
-//		}
-
-//		public WaveEntity TryGetNextEntity()
-//		{
-//			bool canGetEntity = _internalTimer.Update();
-
-//			if (canGetEntity == true && _waveEntities.Count < _currentEntityIndex)
-//			{
-//				_currentEntityIndex += 1;
-//				if (IsWaveEnded() == false)
-//				{
-//					_internalTimer.Start();
-//				}
-//				return _waveEntities[_currentEntityIndex - 1];
-//			}
-//			return null;
-//		}
-//	}
-
-//	[CreateAssetMenu(fileName = "Wave", menuName = "Gameleon/Wave")]
-//	public class WaveDatabase : ScriptableObject
-//	{
-//		[SerializeField]
-//		private List<Wave> _waves = null;
-
-//		[SerializeField]
-//		private Timer _timer = null;
-
-//		[System.NonSerialized]
-//		private Wave _currentWave = null;
-
-//		[System.NonSerialized]
-//		private int _currentWaveIndex = 0;
-
-//		public void TryGetNextEntityFromWave()
-//		{
-//			if (_currentWave.IsWaveEnded() && _currentWaveIndex < _waves.Count + 1)
-//			{
-//				_currentWaveIndex += 1;
-//				_currentWave = _waves[_currentWaveIndex];
-//			}
-//			_currentWave.TryGetNextEntity();
-//		}
-
-//		public void GetWave()
-//		{
-//		}
-//	}
-//}

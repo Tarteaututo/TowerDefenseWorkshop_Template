@@ -9,7 +9,7 @@
 		private EntityType _entityType = EntityType.None;
 
 		[SerializeField]
-		private int _extraDurationAfterSpawned = 0;
+		private float _extraDurationAfterSpawned = 0;
 
 		public EntityType EntityType
 		{
@@ -19,7 +19,7 @@
 			}
 		}
 
-		public int ExtraDurationAfterSpawned
+		public float ExtraDurationAfterSpawned
 		{
 			get
 			{

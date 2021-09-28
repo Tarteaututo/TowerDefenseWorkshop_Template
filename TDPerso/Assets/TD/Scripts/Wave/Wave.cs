@@ -57,6 +57,21 @@
 			return _waveElements.Count != 0 ? _waveElements.Dequeue() : null;
 		}
 
+		public float GetWaveDuration()
+		{
+			return _durationBetweenSpawnedEntity * _waveEntitiesDescriptions.Count + GetAllWaveEntitiesExtraDuration();
+
+			float GetAllWaveEntitiesExtraDuration()
+			{
+				float result = 0;
+				for (int i = 0, length = _waveEntitiesDescriptions.Count; i < length; i++)
+				{
+					result += _waveEntitiesDescriptions[i].ExtraDurationAfterSpawned;
+				}
+				return result;
+			}
+		}
+
 		private void InitializeRuntime()
 		{
 			_waveElements = new Queue<WaveEntityDescription>();
@@ -65,6 +80,5 @@
 				_waveElements.Enqueue(_waveEntitiesDescriptions[i]);
 			}
 		}
-
 	}
 }

@@ -34,6 +34,7 @@
 			_wave = new Wave(wave);
 			_timer.Set(wave.DurationBetweenSpawnedEntity).Start();
 			WaveStarted?.Invoke(this, wave);
+			InstantiateNextWaveElement();
 		}
 
 		private WaveEntity InstantiateEntity(WaveEntity entityPrefab)
@@ -42,6 +43,30 @@
 			_runtimeWaveEntities.Add(entityInstance);
 			EntitySpawned?.Invoke(this, entityInstance);
 			return entityInstance;
+		}
+
+		private void InstantiateNextWaveElement()
+		{
+			if (_wave.HasWaveElementsLeft == true)
+			{
+				var nextEntity = _wave.GetNextWaveElement();
+
+				if (DatabaseManager.Instance.WaveDatabase.GetWaveElementFromType(nextEntity.EntityType, out WaveEntity outEntity) == true)
+				{
+					outEntity = InstantiateEntity(outEntity);
+					outEntity.SetPath(_path);
+					_timer.Set(_wave.DurationBetweenSpawnedEntity + nextEntity.ExtraDurationAfterSpawned).Start();
+				}
+				else
+				{
+					Debug.LogErrorFormat("{0}.UpdateWave() cannot GetWaveElementFromType {1}, no corresponding type found in database.", GetType().Name, nextEntity.EntityType);
+					return;
+				}
+			}
+			else
+			{
+				WaveEnded?.Invoke(this, _wave);
+			}
 		}
 
 		private void Update() => UpdateWave();
@@ -54,26 +79,7 @@
 
 				if (shouldInstantiateEntity == true)
 				{
-					if (_wave.HasWaveElementsLeft == true)
-					{
-						var nextEntity = _wave.GetNextWaveElement();
-
-						if (DatabaseManager.Instance.WaveDatabase.GetWaveElementFromType(nextEntity.EntityType, out WaveEntity outEntity) == true)
-						{
-							outEntity = InstantiateEntity(outEntity);
-							outEntity.SetPath(_path);
-							_timer.Set(_wave.DurationBetweenSpawnedEntity + nextEntity.ExtraDurationAfterSpawned).Start();
-						}
-						else
-						{
-							Debug.LogErrorFormat("{0}.UpdateWave() cannot GetWaveElementFromType {1}, no corresponding type found in database.", GetType().Name, nextEntity.EntityType);
-							return;
-						}
-					}
-					else
-					{
-						WaveEnded?.Invoke(this, _wave);
-					}
+					InstantiateNextWaveElement();
 				}
 			}
 		}

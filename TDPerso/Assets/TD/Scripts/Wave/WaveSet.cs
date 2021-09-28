@@ -37,8 +37,6 @@
 		}
 	}
 
-
-
 #if UNITY_EDITOR
 	[CustomEditor(typeof(WaveSet))]
 	public class WaveSetEditor : Editor
@@ -55,6 +53,5 @@
 		}
 	}
 #endif //UNITY_EDITOR
-
 
 }

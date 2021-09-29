@@ -6,13 +6,23 @@ using UnityEngine;
 /// <summary>
 /// Facade for Tower subsystems
 /// </summary>
-public class Tower : MonoBehaviour
+public class Tower : MonoBehaviour, IPickerGhost
 {
 	[SerializeField]
 	private WeaponController _weaponController = null;
 
 	[SerializeField]
     private DamageableDetector _damageableDetector = null;
+
+	private void Awake()
+	{
+		enabled = false;
+	}
+
+	public void Enable(bool isEnabled)
+	{
+		enabled = isEnabled;
+	}
 
 	private void Update()
 	{
@@ -22,5 +32,10 @@ public class Tower : MonoBehaviour
 			_weaponController.LookAt(damageableTarget.GetAimPosition());
 			_weaponController.Fire();
 		}
+	}
+
+	Transform IPickerGhost.GetTransform()
+	{
+		return transform;
 	}
 }

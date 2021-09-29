@@ -7,7 +7,7 @@
 	using UnityEditor;
 #endif //UNITY_EDITOR
 
-	[CreateAssetMenu(menuName = "Gameleon/Database/WaveSet")]
+	[CreateAssetMenu(menuName = "GameSup/WaveSet")]
 	public class WaveSet : ScriptableObject
 	{
 		[Tooltip("Index is the spawner index. _waves[0] will be spawner00, _wave[1] spawner01, etc...")]

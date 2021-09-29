@@ -10,6 +10,7 @@
 		[SerializeField] private LayerMask _layerMask;
 
 		private Vector3 _hitPosition = Vector3.zero;
+		private Vector3 _cellPosition = Vector3.zero;
 		private Transform _computedGridPosition = null;
 
 		public Transform GetGridPosition
@@ -29,6 +30,14 @@
 			get
 			{
 				return _hitPosition;
+			}
+		}
+
+		public Vector3 CellPosition
+		{
+			get
+			{
+				return _cellPosition;
 			}
 		}
 
@@ -53,12 +62,12 @@
 			}
 			return cell = null;
 		}
-		public void Activate(bool isActive)
+		public void Activate(bool isActive, bool showHighlighter = true)
 		{
 			enabled = isActive;
 			if (_highlighter != null)
 			{
-				_highlighter.gameObject.SetActive(isActive);
+				_highlighter.gameObject.SetActive(isActive && showHighlighter);
 			}
 			_computedGridPosition = null;
 		}
@@ -68,21 +77,21 @@
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
 
-			if (Physics.Raycast(ray, out hit/*, _layerMask*/))
+			if (Physics.Raycast(ray, out hit, float.MaxValue, _layerMask))
 			{
-				Debug.Log("OUI");
-				//Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+				Vector3 highlightPosition = _grid.GetCellCenter(hit.point);
+				highlightPosition.y = 0.1f;
 
-			//if (Physics.Raycast(mousePos, Camera.main.transform.forward, out hit, float.MaxValue, _layerMask))
-			//{
+				_cellPosition = highlightPosition;
+				_hitPosition = hit.point;
 				if (_highlighter != null)
 				{
-					Vector3 highlightPosition = _grid.GetCellCenter(hit.point);
-					highlightPosition.y = 0.1f;
 					_highlighter.transform.position = highlightPosition;
 					_highlighter.gameObject.SetActive(true);
 				}
-				_hitPosition = hit.point;
+
+				//Debug.Log(hit.transform.name);
+
 				return hit.transform;
 			}
 			else
@@ -116,24 +125,6 @@
 			}
 
 			Handles.color = color;
-		}
-
-		void Update()
-		{
-			Camera cam = Camera.main;
-
-			Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-
-			RaycastHit hit;
-
-			//if (Physics.Raycast(ray.origin, ray.direction, out hit))
-			if (Physics.Raycast(ray, out hit))
-			{
-				if (Input.GetMouseButtonDown(0))
-				{
-					Debug.Log(hit.collider.gameObject);
-				}
-			}
 		}
 
 	}

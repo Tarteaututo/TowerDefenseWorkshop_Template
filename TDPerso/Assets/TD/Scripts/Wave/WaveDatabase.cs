@@ -30,7 +30,7 @@
 	}
 
 
-	[CreateAssetMenu(menuName = "Gameleon/Database/WaveDatabase")]
+	[CreateAssetMenu(menuName = "GameSup/WaveDatabase")]
 	public class WaveDatabase : ScriptableObject
 	{
 		[SerializeField]

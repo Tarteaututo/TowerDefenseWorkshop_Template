@@ -13,6 +13,8 @@
 		private Vector3 _cellPosition = Vector3.zero;
 		private Transform _computedGridPosition = null;
 
+		private Cell _lastFoundCell = null;
+
 		public Transform GetGridPosition
 		{
 			get
@@ -41,6 +43,14 @@
 			}
 		}
 
+		public Cell LastFoundCell
+		{
+			get
+			{
+				return _lastFoundCell;
+			}
+		}
+
 		private void OnDestroy()
 		{
 			_computedGridPosition = null;
@@ -49,6 +59,7 @@
 		private void LateUpdate()
 		{
 			_computedGridPosition = null;
+			_lastFoundCell = null;
 		}
 
 		public bool TryGetCell(out Cell cell)
@@ -57,7 +68,7 @@
 			if (hitTransform != null)
 			{
 				Debug.Log(hitTransform.name);
-				cell = hitTransform.GetComponentInParent<Cell>();
+				_lastFoundCell = cell = hitTransform.GetComponentInParent<Cell>();
 				return cell != null;
 			}
 			return cell = null;

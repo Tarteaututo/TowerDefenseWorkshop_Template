@@ -4,15 +4,16 @@
 	using System.Collections.Generic;
 	using UnityEngine;
 
+	public interface ICellChild
+	{
+		Transform GetTransform();
+		void OnSetChild();
+	}
+
 	public class Cell : MonoBehaviour
 	{
-		#region Fields
-		#region Private
-		private Tower _towerChild = null;
-		#endregion Private
-		#endregion Fields
+		private ICellChild _towerChild = null;
 
-		#region Properties
 		public bool HasChild
 		{
 			get
@@ -20,17 +21,19 @@
 				return _towerChild != null;
 			}
 		}
-		#endregion Properties
 
-		#region Methods
-		#region Public
-		public void SetChild(Tower tower)
+		public bool SetChild(ICellChild cellChild)
 		{
-			tower.transform.SetParent(transform);
-			tower.transform.localPosition = Vector3.zero;
-			_towerChild = tower;
+			if (cellChild == null)
+			{
+				return false;
+			}
+			var childTransform = cellChild.GetTransform();
+			childTransform.SetParent(transform);
+			childTransform.localPosition = Vector3.zero;
+			cellChild.OnSetChild();
+			_towerChild = cellChild;
+			return true;
 		}
-		#endregion Public
-		#endregion Methods
 	}
 }

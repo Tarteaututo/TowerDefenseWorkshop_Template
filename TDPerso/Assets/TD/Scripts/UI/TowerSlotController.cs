@@ -2,6 +2,7 @@
 {
 	using System.Collections;
 	using System.Collections.Generic;
+	using TMPro;
 	using UnityEngine;
 	using UnityEngine.UI;
 
@@ -21,6 +22,13 @@
 
 		[System.NonSerialized]
 		private TowerDescription _currentTowerDescription = null;
+		public PlayerPickerController PlayerPickerController
+		{
+			get
+			{
+				return LevelReferences.Instance.PlayerPickerController;
+			}
+		}
 
 		private void OnEnable()
 		{
@@ -44,14 +52,24 @@
 			// Instantiate ghost
 			// get picker, feed the ghost
 			// 
-			_currentTowerDescription = sender.TowerDescription;
-			ChangeState(State.GhostVisible);
+			if (_state == State.Available)
+			{
+				_currentTowerDescription = sender.TowerDescription;
+				ChangeState(State.GhostVisible);
+			}
 		}
 
 		private void Update()
 		{
 			if (_state == State.GhostVisible)
 			{
+				if (Input.GetMouseButtonDown(0) == true)
+				{
+					if (PlayerPickerController.TrySetGhostAsCellChild() == true)
+					{
+						ChangeState(State.Available);
+					}
+				}
 				if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape) == true)
 				{
 					ChangeState(State.Available);
@@ -65,17 +83,15 @@
 			{
 				case State.Available:
 				{
-					var playerPickerController = LevelReferences.Instance.PlayerPickerController;
-					playerPickerController.DestroyGhost();
-					playerPickerController.Activate(false);
+					PlayerPickerController.DestroyGhost();
+					PlayerPickerController.Activate(false);
 					// destroy ghost
 					_currentTowerDescription = null;
 				}
 				break;
 				case State.GhostVisible:
 				{
-					var playerPickerController = LevelReferences.Instance.PlayerPickerController;
-					playerPickerController.ActivateWithGhost(_currentTowerDescription.Instantiate());
+					PlayerPickerController.ActivateWithGhost(_currentTowerDescription.Instantiate());
 				}
 					break;
 				default:

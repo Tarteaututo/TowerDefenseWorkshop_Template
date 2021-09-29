@@ -14,16 +14,10 @@ public class PlayerPickerController : MonoBehaviour
 	private GridPicker _gridPicker = null;
 
 	[System.NonSerialized]
-	private Transform _ghost = null;
+	private IPickerGhost _ghost = null;
 
 	[System.NonSerialized]
 	private bool _isActive = false;
-
-	[ContextMenu("Activate")]
-	private void DoActivate() => Activate(true);
-
-	[ContextMenu("Deactivate")]
-	private void DoDeactivate() => Activate(false);
 
 	public void Activate(bool isActive)
 	{
@@ -34,13 +28,30 @@ public class PlayerPickerController : MonoBehaviour
 	//TODO AL : ui to call setghost, etc...
 	public void ActivateWithGhost(IPickerGhost ghost)
 	{
-		_ghost = ghost.GetTransform();
+		_ghost = ghost;
 		Activate(true);
 	}
 
 	public void DestroyGhost()
 	{
-		Destroy(_ghost.gameObject);
+		if (_ghost != null)
+		{
+			Destroy(_ghost.GetTransform().gameObject);
+			_ghost = null;
+		}
+	}
+
+	public bool TrySetGhostAsCellChild()
+	{
+		if (_gridPicker.TryGetCell(out Cell cell) == true)
+		{
+			if (cell.SetChild(_ghost as ICellChild) == true)
+			{
+				_ghost = null;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void Update()
@@ -49,13 +60,21 @@ public class PlayerPickerController : MonoBehaviour
 		{
 			if (_gridPicker.TryGetCell(out Cell cell) == true)
 			{
-				_ghost.transform.position = _gridPicker.CellPosition;
+				_ghost.GetTransform().position = _gridPicker.CellPosition;
 			}
 			else if (_ghost != null)
 			{
-				_ghost.transform.position = _gridPicker.HitPosition;
+				_ghost.GetTransform().position = _gridPicker.HitPosition;
 			}
 		}
 
 	}
+
+
+	[ContextMenu("Activate")]
+	private void DoActivate() => Activate(true);
+
+	[ContextMenu("Deactivate")]
+	private void DoDeactivate() => Activate(false);
+
 }

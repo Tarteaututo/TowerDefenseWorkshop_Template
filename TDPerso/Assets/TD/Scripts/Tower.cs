@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Facade for Tower subsystems
 /// </summary>
-public class Tower : MonoBehaviour, IPickerGhost
+public class Tower : MonoBehaviour, IPickerGhost, ICellChild
 {
 	[SerializeField]
 	private WeaponController _weaponController = null;
@@ -34,8 +34,14 @@ public class Tower : MonoBehaviour, IPickerGhost
 		}
 	}
 
-	Transform IPickerGhost.GetTransform()
+	// Interfaces
+	public Transform GetTransform()
 	{
 		return transform;
+	}
+
+	public void OnSetChild()
+	{
+		Enable(true);
 	}
 }

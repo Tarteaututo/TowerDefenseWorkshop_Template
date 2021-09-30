@@ -1,80 +1,76 @@
-using GSGD1;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public interface IPickerGhost
+namespace GSGD1
 {
-	Transform GetTransform();
-}
+	using System.Collections;
+	using System.Collections.Generic;
+	using UnityEngine;
 
-public class PlayerPickerController : MonoBehaviour
-{
-	[SerializeField]
-	private GridPicker _gridPicker = null;
-
-	[System.NonSerialized]
-	private IPickerGhost _ghost = null;
-
-	[System.NonSerialized]
-	private bool _isActive = false;
-
-	public void Activate(bool isActive)
+	public class PlayerPickerController : MonoBehaviour
 	{
-		_isActive = isActive;
-		_gridPicker.Activate(isActive, true);
-	}
+		[SerializeField]
+		private GridPicker _gridPicker = null;
 
-	//TODO AL : ui to call setghost, etc...
-	public void ActivateWithGhost(IPickerGhost ghost)
-	{
-		_ghost = ghost;
-		Activate(true);
-	}
+		[System.NonSerialized]
+		private IPickerGhost _ghost = null;
 
-	public void DestroyGhost()
-	{
-		if (_ghost != null)
+		[System.NonSerialized]
+		private bool _isActive = false;
+
+		public void Activate(bool isActive)
 		{
-			Destroy(_ghost.GetTransform().gameObject);
-			_ghost = null;
+			_isActive = isActive;
+			_gridPicker.Activate(isActive, true);
 		}
-	}
 
-	public bool TrySetGhostAsCellChild()
-	{
-		if (_gridPicker.TryGetCell(out Cell cell) == true)
+		public void ActivateWithGhost(IPickerGhost ghost)
 		{
-			if (cell.SetChild(_ghost as ICellChild) == true)
+			_ghost = ghost;
+			Activate(true);
+		}
+
+		public void DestroyGhost()
+		{
+			if (_ghost != null)
 			{
+				Destroy(_ghost.GetTransform().gameObject);
 				_ghost = null;
-				return true;
 			}
 		}
-		return false;
-	}
 
-	private void Update()
-	{
-		if (_isActive == true)
+		public bool TrySetGhostAsCellChild()
 		{
 			if (_gridPicker.TryGetCell(out Cell cell) == true)
 			{
-				_ghost.GetTransform().position = _gridPicker.CellPosition;
+				if (cell.SetChild(_ghost as ICellChild) == true)
+				{
+					_ghost = null;
+					return true;
+				}
 			}
-			else if (_ghost != null)
-			{
-				_ghost.GetTransform().position = _gridPicker.HitPosition;
-			}
+			return false;
 		}
 
+		private void Update()
+		{
+			if (_isActive == true)
+			{
+				if (_gridPicker.TryGetCell(out Cell cell) == true)
+				{
+					_ghost.GetTransform().position = _gridPicker.CellPosition;
+				}
+				else if (_ghost != null)
+				{
+					_ghost.GetTransform().position = _gridPicker.HitPosition;
+				}
+			}
+
+		}
+
+
+		[ContextMenu("Activate")]
+		private void DoActivate() => Activate(true);
+
+		[ContextMenu("Deactivate")]
+		private void DoDeactivate() => Activate(false);
+
 	}
-
-
-	[ContextMenu("Activate")]
-	private void DoActivate() => Activate(true);
-
-	[ContextMenu("Deactivate")]
-	private void DoDeactivate() => Activate(false);
-
 }

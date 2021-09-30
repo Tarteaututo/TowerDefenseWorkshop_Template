@@ -1,6 +1,5 @@
 ﻿namespace GSGD1
 {
-	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEngine;
 
@@ -66,7 +65,10 @@
 			}
 		}
 
-		private void Update() => UpdateWave();
+		private void Update()
+		{
+			UpdateWave();
+		}
 
 		private void UpdateWave()
 		{

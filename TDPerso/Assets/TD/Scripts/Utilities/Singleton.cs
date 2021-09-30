@@ -6,17 +6,14 @@
 
 	public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 	{
-		#region Fields
 		private static T _instance = null;
-		#endregion Fields
 
-		#region Properties
 		public static T Instance
 		{
 			get
 			{
 				if (_instance == null)
-				{	
+				{
 					_instance = CheckForMultipleInstances();
 				}
 				return _instance;
@@ -30,10 +27,7 @@
 				return _instance != null;
 			}
 		}
-		#endregion Properties
 
-		#region Methods
-		#region MonoBehaviour
 		protected virtual void Awake()
 		{
 			_instance = CheckForMultipleInstances();
@@ -49,9 +43,7 @@
 		{
 			_instance = null;
 		}
-		#endregion MonoBehaviour
 
-		#region Private
 		private static T CheckForMultipleInstances()
 		{
 			T[] instances = FindObjectsOfType<T>();
@@ -67,7 +59,5 @@
 			}
 			return instances[0];
 		}
-		#endregion Private
-		#endregion Methods
 	}
 }

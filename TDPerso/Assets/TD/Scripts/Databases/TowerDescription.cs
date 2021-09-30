@@ -20,9 +20,9 @@ namespace GSGD1
 		public Sprite Icon => _icon;
 		public Color IconColor => _iconColor;
 
-		public Tower Instantiate(/*Transform parent*/)
+		public Tower Instantiate()
 		{
-			return GameObject.Instantiate(_prefab/*, parent*/);
+			return GameObject.Instantiate(_prefab);
 		}
 	}
 }

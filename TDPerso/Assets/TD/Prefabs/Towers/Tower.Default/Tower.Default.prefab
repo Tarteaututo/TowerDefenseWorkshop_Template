@@ -584,6 +584,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weapon: {fileID: 302692792590252284}
+  _rotationSpeed: 50
+  _minAngleToFire: 5
 --- !u!114 &302692792590252284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -646,7 +648,7 @@ GameObject:
   - component: {fileID: 302692793403659943}
   - component: {fileID: 302692793403659936}
   m_Layer: 0
-  m_Name: Tower
+  m_Name: Tower.Default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

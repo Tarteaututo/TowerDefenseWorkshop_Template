@@ -14,7 +14,6 @@
 		[SerializeField]
 		private List<Wave> _waves = null;
 
-		// TODO AL 
 		[SerializeField]
 		private float _waitingDurationBefore = 0f;
 

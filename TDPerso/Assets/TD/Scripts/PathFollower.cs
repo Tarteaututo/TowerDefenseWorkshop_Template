@@ -68,11 +68,10 @@
 		private void LookAt(Vector3 position)
 		{
 			//transform.LookAt(position, Vector3.up);
-			// refaire en quat
 
-			var direction = position - transform.position;
+			Vector3 direction = position - transform.position;
 			direction.y = 0;
-			var rotation = Quaternion.LookRotation(direction, Vector3.up);
+			Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
 			transform.rotation =  Quaternion.Slerp(transform.rotation, rotation, _rotateSpeed * Time.deltaTime);
 		}
 	}

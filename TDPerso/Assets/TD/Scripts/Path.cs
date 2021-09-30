@@ -21,7 +21,6 @@
 
 		private readonly Vector3 _offset = new Vector3(0, 0.5f, 0);
 
-		//public List<Transform> Waypoints { get => _waypoints; }
 		public List<Transform> Waypoints
 		{
 			get
@@ -45,6 +44,7 @@
 			}
 		}
 
+#if UNITY_EDITOR
 		private void OnDrawGizmos()
 		{
 			if (_showGizmos == false || _waypoints == null)
@@ -68,5 +68,7 @@
 				}
 			}
 		}
+#endif //UNITY_EDITOR
+
 	}
 }

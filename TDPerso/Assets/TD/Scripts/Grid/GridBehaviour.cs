@@ -1,17 +1,14 @@
 ﻿namespace GSGD1
 {
-	using System.Collections;
-	using System.Collections.Generic;
 	using UnityEngine;
-
 
 #if UNITY_EDITOR
 	using UnityEditor;
 #endif //UNITY_EDITOR
 
-	public class GridBehaviour : MonoBehaviour
+	public partial class GridBehaviour : MonoBehaviour
 	{
-		[SerializeField] 
+		[SerializeField]
 		private int _cellCount = 10;
 
 		[SerializeField]
@@ -33,8 +30,11 @@
 			);
 			return worldCoord + (_pivotIsCenter ? Vector3.zero : Vector3.one * 0.5f);
 		}
+	}
 
 #if UNITY_EDITOR
+	public partial class GridBehaviour : MonoBehaviour
+	{
 		[SerializeField] private bool _showGrid = true;
 		[SerializeField] private bool _resetInfiniteLoopPreventer = true;
 
@@ -43,7 +43,7 @@
 		{
 			if (_resetInfiniteLoopPreventer == true)
 			{
-				return; 
+				return;
 			}
 
 			if (_cellSize < 1)

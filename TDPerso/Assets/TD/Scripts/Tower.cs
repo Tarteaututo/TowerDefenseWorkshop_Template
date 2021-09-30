@@ -1,47 +1,52 @@
-﻿using GSGD1;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-/// <summary>
-/// Facade for Tower subsystems
-/// </summary>
-public class Tower : MonoBehaviour, IPickerGhost, ICellChild
+﻿namespace GSGD1
 {
-	[SerializeField]
-	private WeaponController _weaponController = null;
+	using GSGD1;
+	using System.Collections;
+	using System.Collections.Generic;
+	using UnityEngine;
 
-	[SerializeField]
-    private DamageableDetector _damageableDetector = null;
-
-	private void Awake()
+	/// <summary>
+	/// Facade for Tower subsystems
+	/// </summary>
+	public class Tower : MonoBehaviour, IPickerGhost, ICellChild
 	{
-		enabled = false;
-	}
+		[SerializeField]
+		private WeaponController _weaponController = null;
 
-	public void Enable(bool isEnabled)
-	{
-		enabled = isEnabled;
-	}
+		[SerializeField]
+		private DamageableDetector _damageableDetector = null;
 
-	private void Update()
-	{
-		if (_damageableDetector.HasAnyDamageableInRange() == true)
+		private void Awake()
 		{
-			var damageableTarget = _damageableDetector.GetNearestDamageable();
-			_weaponController.LookAt(damageableTarget.GetAimPosition());
-			_weaponController.Fire();
+			enabled = false;
 		}
-	}
 
-	// Interfaces
-	public Transform GetTransform()
-	{
-		return transform;
-	}
+		public void Enable(bool isEnabled)
+		{
+			enabled = isEnabled;
+		}
 
-	public void OnSetChild()
-	{
-		Enable(true);
+		private void Update()
+		{
+			if (_damageableDetector.HasAnyDamageableInRange() == true)
+			{
+				Damageable damageableTarget = _damageableDetector.GetNearestDamageable();
+				//_weaponController.LookAt(damageableTarget.GetAimPosition());
+				//_weaponController.Fire();
+
+				_weaponController.LookAtAndFire(damageableTarget.GetAimPosition());
+			}
+		}
+
+		// Interfaces
+		public Transform GetTransform()
+		{
+			return transform;
+		}
+
+		public void OnSetChild()
+		{
+			Enable(true);
+		}
 	}
 }

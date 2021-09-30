@@ -1,19 +1,18 @@
-﻿using GSGD1;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class WaveEntity : MonoBehaviour
+﻿namespace GSGD1
 {
-	[SerializeField]
-	private PathFollower _pathFollower = null;
+	using GSGD1;
+	using System.Collections;
+	using System.Collections.Generic;
+	using UnityEngine;
 
-	public void SetPath(Path path, bool teleportToFirstWaypoint = true)
+	public class WaveEntity : MonoBehaviour
 	{
-		_pathFollower.SetPath(path, teleportToFirstWaypoint);
-	}
+		[SerializeField]
+		private PathFollower _pathFollower = null;
 
-	public void UpdateEntity(float deltaTime)
-	{
+		public void SetPath(Path path, bool teleportToFirstWaypoint = true)
+		{
+			_pathFollower.SetPath(path, teleportToFirstWaypoint);
+		}
 	}
 }

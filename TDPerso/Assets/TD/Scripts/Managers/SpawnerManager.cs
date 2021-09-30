@@ -1,6 +1,5 @@
 namespace GSGD1
 {
-	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEngine;
@@ -59,12 +58,12 @@ namespace GSGD1
 				{
 					if (waves.Count <= i)
 					{
-						// There are more wave than available spawner
+						Debug.LogWarningFormat("{0}.StartNewWaveSet() There are more wave ({1}) than available spawner ({2})", GetType().Name, waves.Count, i);
 						break;
 					}
 					if (waves[i] == null)
 					{
-						// Null reference found in WaveSet
+						Debug.LogWarningFormat("{0}.StartNewWaveSet() Null reference found in WaveSet at index {1}, ignoring.", GetType().Name, i);
 						break;
 					}
 					_currentWaveRunning += 1;

@@ -1,76 +1,78 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class DamageableDetector : MonoBehaviour
+﻿namespace GSGD1
 {
-	[System.NonSerialized]
-	private List<Damageable> _damageablesInRange = new List<Damageable>();
+	using System.Collections.Generic;
+	using UnityEngine;
 
-	public bool HasAnyDamageableInRange()
+	public class DamageableDetector : MonoBehaviour
 	{
-		return _damageablesInRange.Count > 0;
-	}
+		[System.NonSerialized]
+		private List<Damageable> _damageablesInRange = new List<Damageable>();
 
-	public Damageable GetFirstDamageable()
-	{
-		if (HasAnyDamageableInRange() == true)
+		public bool HasAnyDamageableInRange()
 		{
-			return _damageablesInRange[0];
+			return _damageablesInRange.Count > 0;
 		}
-		else
-		{
-			return null;
-		}
-	}
 
-	public Damageable GetNearestDamageable()
-	{
-		float shortestDistance = 0;
-		int shortestDistanceIndex = 0;
-		for (int i = 0, length = _damageablesInRange.Count; i < length; i++)
+		public Damageable GetFirstDamageable()
 		{
-			var distance = (_damageablesInRange[i].transform.position - transform.position).sqrMagnitude;
-			if (distance < shortestDistance)
+			if (HasAnyDamageableInRange() == true)
 			{
-				shortestDistance = distance;
-				shortestDistanceIndex = i;
+				return _damageablesInRange[0];
+			}
+			else
+			{
+				return null;
 			}
 		}
 
-		return _damageablesInRange[shortestDistanceIndex];
-	}
-
-
-	private void OnTriggerEnter(Collider other)
-	{
-		Damageable damageable = other.GetComponentInParent<Damageable>();
-
-		if (damageable != null && _damageablesInRange.Contains(damageable) == false)
+		public Damageable GetNearestDamageable()
 		{
-			damageable.DamageTaken -= Damageable_OnDamageTaken;
-			damageable.DamageTaken += Damageable_OnDamageTaken;
-			_damageablesInRange.Add(damageable);
+			float shortestDistance = 0;
+			int shortestDistanceIndex = 0;
+			for (int i = 0, length = _damageablesInRange.Count; i < length; i++)
+			{
+				var distance = (_damageablesInRange[i].transform.position - transform.position).sqrMagnitude;
+				if (distance < shortestDistance)
+				{
+					shortestDistance = distance;
+					shortestDistanceIndex = i;
+				}
+			}
+
+			return _damageablesInRange[shortestDistanceIndex];
 		}
-	}
 
-	private void OnTriggerExit(Collider other)
-	{
-		Damageable damageable = other.GetComponentInParent<Damageable>();
 
-		if (damageable != null && _damageablesInRange.Contains(damageable) == true)
+		private void OnTriggerEnter(Collider other)
 		{
-			damageable.DamageTaken -= Damageable_OnDamageTaken;
-			_damageablesInRange.Remove(damageable);
-		}
-	}
+			Damageable damageable = other.GetComponentInParent<Damageable>();
 
-	private void Damageable_OnDamageTaken(Damageable caller, int currentHealth, int damageTaken)
-	{
-		if (currentHealth <= 0)
+			if (damageable != null && _damageablesInRange.Contains(damageable) == false)
+			{
+				damageable.DamageTaken -= Damageable_OnDamageTaken;
+				damageable.DamageTaken += Damageable_OnDamageTaken;
+				_damageablesInRange.Add(damageable);
+			}
+		}
+
+		private void OnTriggerExit(Collider other)
 		{
-			_damageablesInRange.Remove(caller);
-		}
-	}
+			Damageable damageable = other.GetComponentInParent<Damageable>();
 
+			if (damageable != null && _damageablesInRange.Contains(damageable) == true)
+			{
+				damageable.DamageTaken -= Damageable_OnDamageTaken;
+				_damageablesInRange.Remove(damageable);
+			}
+		}
+
+		private void Damageable_OnDamageTaken(Damageable caller, int currentHealth, int damageTaken)
+		{
+			if (currentHealth <= 0)
+			{
+				_damageablesInRange.Remove(caller);
+			}
+		}
+
+	}
 }

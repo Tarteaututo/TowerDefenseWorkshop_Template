@@ -1,13 +1,21 @@
 ﻿namespace GSGD1
 {
-	using System.Collections;
-	using UnityEditor;
 	using UnityEngine;
+
+#if UNITY_EDITOR
+	using UnityEditor;
+#endif //UNITY_EDITOR
+
 	public class GridPicker : MonoBehaviour
 	{
-		[SerializeField] private Transform _highlighter = null;
-		[SerializeField] private GridBehaviour _grid = null;
-		[SerializeField] private LayerMask _layerMask;
+		[SerializeField]
+		private Transform _highlighter = null;
+
+		[SerializeField]
+		private GridBehaviour _grid = null;
+
+		[SerializeField]
+		private LayerMask _layerMask;
 
 		private Vector3 _hitPosition = Vector3.zero;
 		private Vector3 _cellPosition = Vector3.zero;
@@ -115,6 +123,7 @@
 			}
 		}
 
+		#if UNITY_EDITOR
 		private void OnDrawGizmos()
 		{
 			var color = Handles.color;
@@ -122,20 +131,12 @@
 			Handles.color = Color.blue;
 			{
 				Camera cam = Camera.main;
-
-				//Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-				//Vector3 mousePos = cam.ViewportToWorldPoint(Input.mousePosition);
-				//Handles.DrawLine(mousePos, mousePos + cam.transform.forward * 100);
-
-				//Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-				//Ray ray = cam.ViewportPointToRay(Input.mousePosition);
-
 				Handles.DrawLine(ray.origin, ray.origin + (ray.direction * 100));
 			}
-
 			Handles.color = color;
 		}
+		#endif //UNITY_EDITOR
 
 	}
 }

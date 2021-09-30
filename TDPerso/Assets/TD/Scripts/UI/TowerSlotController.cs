@@ -22,6 +22,7 @@
 
 		[System.NonSerialized]
 		private TowerDescription _currentTowerDescription = null;
+
 		public PlayerPickerController PlayerPickerController
 		{
 			get
@@ -49,9 +50,6 @@
 
 		private void TowerSlotController_OnTowerSlotClicked(TowerSlot sender)
 		{
-			// Instantiate ghost
-			// get picker, feed the ghost
-			// 
 			if (_state == State.Available)
 			{
 				_currentTowerDescription = sender.TowerDescription;
@@ -85,7 +83,6 @@
 				{
 					PlayerPickerController.DestroyGhost();
 					PlayerPickerController.Activate(false);
-					// destroy ghost
 					_currentTowerDescription = null;
 				}
 				break;

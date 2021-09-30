@@ -1,5 +1,6 @@
 namespace GSGD1
 {
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEngine;
@@ -11,10 +12,19 @@ namespace GSGD1
 		Spawner02,
 	}
 
-	public class SpawnerManager : Singleton<SpawnerManager>
+	public enum SpawnerStatus
+	{
+		Inactive = 0,
+		WaveRunning
+	}
+
+	public class SpawnerManager : MonoBehaviour
 	{
 		[SerializeField]
 		private List<EntitySpawner> _spawners = null;
+
+		[SerializeField]
+		private bool _autoStartNextWaves = false;
 
 		[System.NonSerialized]
 		private int _currentWaveSetIndex = -1;
@@ -22,15 +32,20 @@ namespace GSGD1
 		[System.NonSerialized]
 		private int _currentWaveRunning = 0;
 
-		protected override void Start()
-		{
-			base.Start();
-			//StartNewWaveSet();
-		}
+		public delegate void SpawnerEvent(SpawnerManager sender, SpawnerStatus status);
+		public event SpawnerEvent WaveStatusChanged = null;
 
 		[ContextMenu("Start waves")]
+		public void StartWaves()
+		{
+			// Start a new wave set only if there are no currently a wave running
+			if (_currentWaveRunning <= 0)
+			{
+				StartNewWaveSet();
+			}
+		}
 
-		private void StartNewWaveSet()
+		public void StartNewWaveSet()
 		{
 			_currentWaveSetIndex += 1;
 			var waveDatabase = DatabaseManager.Instance.WaveDatabase;
@@ -57,6 +72,8 @@ namespace GSGD1
 					spawner.StartWave(waves[i]);
 					spawner.WaveEnded -= Spawner_OnWaveEnded;
 					spawner.WaveEnded += Spawner_OnWaveEnded;
+
+					WaveStatusChanged?.Invoke(this, SpawnerStatus.WaveRunning);
 				}
 			}
 			else
@@ -71,8 +88,10 @@ namespace GSGD1
 
 			_currentWaveRunning -= 1;
 
+			WaveStatusChanged?.Invoke(this, SpawnerStatus.Inactive);
+
 			// should we run a new wave?
-			if (_currentWaveRunning <= 0)
+			if (_autoStartNextWaves == true && _currentWaveRunning <= 0)
 			{
 				StartNewWaveSet();
 			}

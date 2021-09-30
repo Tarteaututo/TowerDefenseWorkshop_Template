@@ -67,7 +67,6 @@
 			Transform hitTransform = GetGridPosition;
 			if (hitTransform != null)
 			{
-				Debug.Log(hitTransform.name);
 				_lastFoundCell = cell = hitTransform.GetComponentInParent<Cell>();
 				return cell != null;
 			}

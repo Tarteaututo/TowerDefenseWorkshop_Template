@@ -107,6 +107,6 @@
 				}
 			}
 		}
-#endif //UNITY_EDITOR
 	}
+#endif //UNITY_EDITOR
 }

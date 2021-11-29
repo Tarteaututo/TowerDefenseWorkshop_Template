@@ -3,6 +3,7 @@ namespace GSGD1
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEngine;
+	using UnityEngine.Events;
 
 	public enum SpawnerIndex
 	{
@@ -30,6 +31,9 @@ namespace GSGD1
 
 		[System.NonSerialized]
 		private int _currentWaveRunning = 0;
+
+		[SerializeField]
+		public UnityEvent<SpawnerManager, SpawnerStatus> WaveStatusChanged_UnityEvent = null;
 
 		public delegate void SpawnerEvent(SpawnerManager sender, SpawnerStatus status);
 		public event SpawnerEvent WaveStatusChanged = null;
@@ -69,8 +73,8 @@ namespace GSGD1
 					_currentWaveRunning += 1;
 					var spawner = _spawners[i];
 					spawner.StartWave(waves[i]);
-					spawner.WaveEnded -= Spawner_OnWaveEnded;
-					spawner.WaveEnded += Spawner_OnWaveEnded;
+					spawner.WaveEnded.RemoveListener(Spawner_OnWaveEnded);
+					spawner.WaveEnded.AddListener(Spawner_OnWaveEnded);
 
 					WaveStatusChanged?.Invoke(this, SpawnerStatus.WaveRunning);
 				}
@@ -83,11 +87,12 @@ namespace GSGD1
 
 		private void Spawner_OnWaveEnded(EntitySpawner entitySpawner, Wave wave)
 		{
-			entitySpawner.WaveEnded -= Spawner_OnWaveEnded;
+			entitySpawner.WaveEnded.RemoveListener(Spawner_OnWaveEnded);
 
 			_currentWaveRunning -= 1;
 
 			WaveStatusChanged?.Invoke(this, SpawnerStatus.Inactive);
+			WaveStatusChanged_UnityEvent?.Invoke(this, SpawnerStatus.Inactive);
 
 			// should we run a new wave?
 			if (_autoStartNextWaves == true && _currentWaveRunning <= 0)

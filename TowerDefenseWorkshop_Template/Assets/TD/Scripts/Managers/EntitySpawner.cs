@@ -2,6 +2,7 @@
 {
 	using System.Collections.Generic;
 	using UnityEngine;
+	using UnityEngine.Events;
 
 	public class EntitySpawner : MonoBehaviour
 	{
@@ -20,9 +21,10 @@
 		[System.NonSerialized]
 		private List<WaveEntity> _runtimeWaveEntities = new List<WaveEntity>();
 
-		public event System.Action<EntitySpawner, Wave> WaveStarted = null;
-		public event System.Action<EntitySpawner, Wave> WaveEnded = null;
-		public event System.Action<EntitySpawner, WaveEntity> EntitySpawned = null;
+		public UnityEvent<EntitySpawner, Wave> WaveStarted = null;
+		public UnityEvent<EntitySpawner, Wave> WaveEnded = null;
+		public UnityEvent<EntitySpawner, WaveEntity> EntitySpawned = null;
+
 		//public event System.Action<EntitySpawner, WaveEntity> EntityDestroyed = null;
 
 		public void StartWave(Wave wave)

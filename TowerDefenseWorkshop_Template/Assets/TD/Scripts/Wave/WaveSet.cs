@@ -10,7 +10,7 @@
 	[CreateAssetMenu(menuName = "GameSup/WaveSet")]
 	public class WaveSet : ScriptableObject
 	{
-		[Tooltip("Index is the spawner index. _waves[0] will be spawner00, _wave[1] spawner01, etc...")]
+		[Header("Wave index is the spawner index : _waves[0] will be spawner00, _wave[1] spawner01, etc...")]
 		[SerializeField]
 		private List<Wave> _waves = null;
 

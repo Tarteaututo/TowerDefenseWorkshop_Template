@@ -31,6 +31,9 @@
 			childTransform.localPosition = Vector3.zero;
 			cellChild.OnSetChild();
 			_towerChild = cellChild;
+
+			Debug.Log($"cell SetChild {transform.position}");
+
 			return true;
 		}
 	}

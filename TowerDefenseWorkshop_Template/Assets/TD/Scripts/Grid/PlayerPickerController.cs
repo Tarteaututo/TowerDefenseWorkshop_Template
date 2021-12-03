@@ -7,6 +7,9 @@ namespace GSGD1
 	public class PlayerPickerController : MonoBehaviour
 	{
 		[SerializeField]
+		private GridBehaviour _grid = null;
+
+		[SerializeField]
 		private GridPicker _gridPicker = null;
 
 		[System.NonSerialized]
@@ -58,7 +61,8 @@ namespace GSGD1
 			{
 				if (_gridPicker.TryGetCell(out Cell cell) == true)
 				{
-					_ghost.GetTransform().position = _gridPicker.CellPosition;
+					_ghost.GetTransform().position = _grid.GetCellCenter(_gridPicker.CellPosition);
+					Debug.Log($"cell found {_grid.GetCellCenter(_gridPicker.CellPosition)}");
 				}
 				else if (_ghost != null)
 				{

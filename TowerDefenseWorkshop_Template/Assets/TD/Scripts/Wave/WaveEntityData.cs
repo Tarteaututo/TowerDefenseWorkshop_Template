@@ -2,7 +2,6 @@
 {
 	using UnityEngine;
 
-#if UNITY_EDITOR
 	[System.Serializable]
 	public class WaveEntityData
 	{
@@ -15,6 +14,4 @@
 		public WaveEntity WaveEntityPrefab => _waveEntityPrefab;
 		public EntityType EntityType => _entityType;
 	}
-#endif //UNITY_EDITOR
-
 }

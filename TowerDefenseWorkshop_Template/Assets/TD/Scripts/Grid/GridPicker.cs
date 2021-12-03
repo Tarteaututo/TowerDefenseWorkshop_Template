@@ -98,7 +98,7 @@
 			if (Physics.Raycast(ray, out hit, float.MaxValue, _layerMask))
 			{
 				Vector3 highlightPosition = _grid.GetCellCenter(hit.point);
-				highlightPosition.y = 0.1f;
+				highlightPosition.y = hit.point.y /*+ 0.1f*/;
 
 				_cellPosition = highlightPosition;
 				_hitPosition = hit.point;

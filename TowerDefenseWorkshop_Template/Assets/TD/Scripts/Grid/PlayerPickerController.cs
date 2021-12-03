@@ -40,10 +40,13 @@ namespace GSGD1
 		{
 			if (_gridPicker.TryGetCell(out Cell cell) == true)
 			{
-				if (cell.SetChild(_ghost as ICellChild) == true)
+				if (cell.HasChild == false)
 				{
-					_ghost = null;
-					return true;
+					if (cell.SetChild(_ghost as ICellChild) == true)
+					{
+						_ghost = null;
+						return true;
+					}
 				}
 			}
 			return false;

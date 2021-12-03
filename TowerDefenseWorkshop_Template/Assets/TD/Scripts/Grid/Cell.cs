@@ -32,8 +32,6 @@
 			cellChild.OnSetChild();
 			_towerChild = cellChild;
 
-			Debug.Log($"cell SetChild {transform.position}");
-
 			return true;
 		}
 	}

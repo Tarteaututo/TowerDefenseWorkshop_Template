@@ -62,7 +62,6 @@ namespace GSGD1
 				if (_gridPicker.TryGetCell(out Cell cell) == true)
 				{
 					_ghost.GetTransform().position = _grid.GetCellCenter(_gridPicker.CellPosition);
-					Debug.Log($"cell found {_grid.GetCellCenter(_gridPicker.CellPosition)}");
 				}
 				else if (_ghost != null)
 				{

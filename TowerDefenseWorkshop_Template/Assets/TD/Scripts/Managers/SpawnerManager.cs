@@ -35,7 +35,7 @@ namespace GSGD1
 		[SerializeField]
 		public UnityEvent<SpawnerManager, SpawnerStatus> WaveStatusChanged_UnityEvent = null;
 
-		public delegate void SpawnerEvent(SpawnerManager sender, SpawnerStatus status);
+		public delegate void SpawnerEvent(SpawnerManager sender, SpawnerStatus status, int runningWaveCount);
 		public event SpawnerEvent WaveStatusChanged = null;
 
 		[ContextMenu("Start waves")]
@@ -76,7 +76,7 @@ namespace GSGD1
 					spawner.WaveEnded.RemoveListener(Spawner_OnWaveEnded);
 					spawner.WaveEnded.AddListener(Spawner_OnWaveEnded);
 
-					WaveStatusChanged?.Invoke(this, SpawnerStatus.WaveRunning);
+					WaveStatusChanged?.Invoke(this, SpawnerStatus.WaveRunning, _currentWaveRunning);
 				}
 			}
 			else
@@ -91,7 +91,7 @@ namespace GSGD1
 
 			_currentWaveRunning -= 1;
 
-			WaveStatusChanged?.Invoke(this, SpawnerStatus.Inactive);
+			WaveStatusChanged?.Invoke(this, SpawnerStatus.Inactive, _currentWaveRunning);
 			WaveStatusChanged_UnityEvent?.Invoke(this, SpawnerStatus.Inactive);
 
 			// should we run a new wave?

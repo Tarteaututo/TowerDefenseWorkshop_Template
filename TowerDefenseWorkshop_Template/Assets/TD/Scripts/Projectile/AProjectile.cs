@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 
-    public class AProjectile : MonoBehaviour
+    public abstract class AProjectile : MonoBehaviour
     {
 		[SerializeField]
 		private bool _destroyIfGiveDamage = true;

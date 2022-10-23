@@ -60,9 +60,9 @@ namespace GSGD1
 
 				for (int i = 0, length = _spawners.Count; i < length; i++)
 				{
-					if (waves.Count <= i)
+					if (i >= waves.Count)
 					{
-						Debug.LogWarningFormat("{0}.StartNewWaveSet() There are more wave ({1}) than available spawner ({2})", GetType().Name, waves.Count, i);
+						Debug.LogWarningFormat("{0}.StartNewWaveSet() There are more spawner ({1}) than wave ({2}), discarding wave.", GetType().Name, _spawners.Count, waves.Count);
 						break;
 					}
 					if (waves[i] == null)

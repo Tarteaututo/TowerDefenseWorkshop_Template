@@ -75,7 +75,7 @@
 		{
 			// return every state where we should have a coherent Progress.
 			// We include Started and Stopping in order to have respectively 0 and 1 Progress, otherwise we have only the intermediate values. 
-			get { return _state == State.Started || _state == State.Started || _state == State.Stopping; }
+			get { return _state == State.Starting || _state == State.Started || _state == State.Stopping; }
 		}
 
 		public float Progress

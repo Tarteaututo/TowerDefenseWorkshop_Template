@@ -35,6 +35,9 @@ namespace GSGD1
 		[SerializeField]
 		public UnityEvent<SpawnerManager, SpawnerStatus, int> WaveStatusChanged_UnityEvent = null;
 
+		[System.NonSerialized]
+		private Coroutine _waitForNextWaveCoroutine;
+
 		public delegate void SpawnerEvent(SpawnerManager sender, SpawnerStatus status, int runningWaveCount);
 		public event SpawnerEvent WaveStatusChanged = null;
 
@@ -98,8 +101,31 @@ namespace GSGD1
 			// should we run a new wave?
 			if (_autoStartNextWaves == true && _currentWaveRunning <= 0)
 			{
-				StartNewWaveSet();
+				// prevent overlapping routines
+				if (_waitForNextWaveCoroutine != null)
+				{
+					StopCoroutine(_waitForNextWaveCoroutine);
+				}
+				_waitForNextWaveCoroutine = StartCoroutine(WaitForNewWaveSet());
 			}
 		}
+
+		private IEnumerator WaitForNewWaveSet()
+		{
+			var waveDatabase = DatabaseManager.Instance.WaveDatabase;
+			float waitingDuration = waveDatabase.Waves[_currentWaveSetIndex].WaitingDurationBefore;
+			
+			if (_currentWaveSetIndex - 1 > 0)
+			{
+				waitingDuration += waveDatabase.Waves[_currentWaveSetIndex - 1].WaitingDurationAfter;
+			}
+
+			Debug.LogFormat("Waiting {0} seconds until next wave.", waitingDuration);
+			yield return new WaitForSeconds(waitingDuration);
+
+			_waitForNextWaveCoroutine = null;
+			StartNewWaveSet();
+		}
+
 	}
 }
